@@ -8,7 +8,7 @@ Install Plugin and Platform
 
     $ cordova platform add android
     $ cordova plugin add com.ionic.keyboard
-    $ cordova com.chariotsolutions.nfc.plugin
+    $ cordova plugin add com.chariotsolutions.nfc.plugin
     $ cordova plugin add cordova-plugin-whitelist
     $ cordova plugin add cordova-plugin-console
     $ cordova plugin add cordova-plugin-splashscreen
