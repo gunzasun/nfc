@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'ionic.utils', 'starter.services'])
+angular.module('starter', ['ionic', 'starter.controllers', 'ionic.utils','nfcFilters', 'starter.services'])
 .constant('ApiEndpoint', {
   //url: 'http://localhost:8100/api/'
     url: 'http://abed-alzain.com/nfc/backend/web/'
@@ -78,9 +78,55 @@ $ionicConfigProvider.tabs.position('bottom');
         controller: 'AccountCtrl'
       }
     }
+  })
+  .state('tab.receipt', {
+    url: '/receipt',
+	cache: 'false',
+    views: {
+      'tab-receipt': {
+        templateUrl: 'templates/receipt.html',
+        controller: 'ReceiptCtrl'
+      }
+    }
+  })
+  .state('tab.view', {
+    url: '/view/:id',
+	cache: 'false',
+    views: {
+      'tab-receipt': {
+        templateUrl: 'templates/view.html',
+        controller: 'ViewReceiptCtrl'
+      }
+    }
   });
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/start');
 
+}).factory('nfcService', function ($rootScope, $ionicPlatform) {
+
+	var tag = {};
+
+	$ionicPlatform.ready(function() {
+		nfc.addNdefListener(function (nfcEvent) {
+			console.log(JSON.stringify(nfcEvent.tag, null, 4));
+			$rootScope.$apply(function(){
+				angular.copy(nfcEvent.tag, tag);
+				// if necessary $state.go('some-route')
+			});
+		}, function () {
+			console.log("Listening for NDEF Tags.");
+		}, function (reason) {
+			alert("Error adding NFC Listener " + reason);
+		});
+
+	});
+
+	return {
+		tag: tag,
+
+		clearTag: function () {
+			angular.copy({}, this.tag);
+		}
+	};
 });

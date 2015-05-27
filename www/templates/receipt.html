@@ -1,0 +1,19 @@
+<ion-view view-title="All Receipts">
+  <ion-content >
+  
+  
+    <div class="list">
+
+  
+  <a class="item" ui-sref="tab.view({id: receipt.id})" ng-repeat="receipt in data">
+    {{receipt.data}}
+    <span class="item-note">
+       {{receipt.date_stamp}}
+    </span>
+  </a>
+
+   
+
+</div>
+  </ion-content>
+</ion-view>

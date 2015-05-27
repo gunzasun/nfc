@@ -1,0 +1,39 @@
+<ion-view view-title="Receipt Data">
+  <ion-content class="padding">
+    <div class="row">
+      <div class="col"></div>
+          <div class="col"></div><div class="col"></div>
+      <div class="col"></div>
+      <div class="col" style="font-size:20px">
+      	<a ng-click="share()">
+        	<i class="ion-android-share-alt"></i>
+        </a>
+        <a style="margin-left:10px;" ng-click="delete()">
+        	<i class="ion-trash-a"></i>
+        </a>
+      </div>
+    </div>
+    
+    <div>
+        Data: <b>{{data.data}}</b><br />
+        Date Stamp: {{data.date_stamp}}
+    </div>
+  </ion-content>
+</ion-view>
+
+<script id="share.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar>
+      <h1 class="title">Share Receipt</h1>
+    </ion-header-bar>
+    <ion-content>
+      <div class="list list-inset">
+ 
+ 	  <label class="item item-input">
+           <input type="email" placeholder="Email" ng-model="senddata.email">
+      </label>  
+	  <button class="button button-block button-calm" ng-click="sendshare()">Send</button>
+    </div>
+    </ion-content>
+  </ion-modal-view>
+</script>

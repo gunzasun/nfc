@@ -1,11 +1,26 @@
-<ion-view view-title="Account">
+<ion-view view-title="Settings">
   <ion-content>
+  <div class="row">
+  <div class="col"><button class="button " ng-click="save()">Save</button></div>
+  <div class="col"></div>
+ 	
+  <div class="col"></div>
+  <div class="col"><a class="button right" ui-sref="start">Logout</a></div>
+</div>
+
+  	  
+  	  
+  	
     <div class="list list-inset">
-      <label class="item item-input">
-          <input type="text" placeholder="Username" ng-model="data.username">
+ 
+ 	  <label class="item item-input">
+          <input type="text" placeholder="Username" ng-model="data.username" readonly="readonly">
       </label>
       <label class="item item-input">
           <input type="email" placeholder="Email" ng-model="data.email">
+      </label>
+      <label class="item item-input">
+          <input type="password" placeholder="Password" ng-model="data.password">
       </label>
       <label class="item item-input">
           <input type="text" placeholder="Full Name" ng-model="data.firstname">
@@ -19,6 +34,6 @@
       </label>
        
     </div>
-      <button class="button button-block button-calm" ng-click="save()">Save Data</button>
+    
   </ion-content>
 </ion-view>

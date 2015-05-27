@@ -1,4 +1,150 @@
 angular.module('starter.services', [])
+.factory('MenuService', function() {
+
+  var menuItems = [
+  	  { text: 'Scan Receipt', iconClass: 'icon ion-map', link: 'scan'},
+      { text: 'My Receipt', iconClass: 'icon ion-map', link: 'one'},
+      { text: 'Share Receipt', iconClass: 'icon ion-gear-b', link: 'two'},
+      { text: 'Profile', iconClass: 'icon ion-star', link: 'three'}
+      /*{ text: 'Profile', iconClass: 'icon ion-star', link: 'three'}
+      { text: 'Logout', iconClass: 'icon ion-star', link: 'three'}
+      */
+  ];
+
+  return {
+    all: function() {
+      return menuItems;
+    }
+  }
+})
+.service('DeleteReceiptService', function($q, $http, ApiEndpoint) {
+    return {
+        deleteReceipt: function(id) {
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+ 			var data  = 'id='+id;
+			var req = {
+			 method: 'GET',
+			 url: ApiEndpoint.url + 'index.php?r=jobapi/delete-receipt&'+data
+			}
+			
+			$http(req)
+				.success(function(data) {
+				  deferred.resolve(data);
+				})
+				.error(function(error){
+				  deferred.reject(error);
+				})
+           
+            promise.success = function(fn) {
+                promise.then(fn);
+                return promise;
+            }
+            promise.error = function(fn) {
+                promise.then(null, fn);
+                return promise;
+            }
+            return promise;
+        }
+    }
+})
+.service('SendReceiptService', function($q, $http, ApiEndpoint) {
+    return {
+        sendReceipt: function(id, email) {
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+ 			var data  = 'id='+id+'&email='+email;
+			var req = {
+			 method: 'GET',
+			 url: ApiEndpoint.url + 'index.php?r=jobapi/send-receipt&'+data
+			}
+			
+			$http(req)
+				.success(function(data) {
+				  deferred.resolve(data);
+				})
+				.error(function(error){
+				  deferred.reject(error);
+				})
+           
+            promise.success = function(fn) {
+                promise.then(fn);
+                return promise;
+            }
+            promise.error = function(fn) {
+                promise.then(null, fn);
+                return promise;
+            }
+            return promise;
+        }
+    }
+})
+.service('ViewReceiptService', function($q, $http, ApiEndpoint) {
+    return {
+        ViewReceipt: function(id) {
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+ 			var data  = 'id='+id;
+			var req = {
+			 method: 'GET',
+			 url: ApiEndpoint.url + 'index.php?r=jobapi/view-receipt&'+data
+			}
+			
+			$http(req)
+				.success(function(data) {
+				  deferred.resolve(data);
+				})
+				.error(function(error){
+				  deferred.reject('Wrong!.');
+				})
+			
+           
+            promise.success = function(fn) {
+                promise.then(fn);
+                return promise;
+            }
+            promise.error = function(fn) {
+                promise.then(null, fn);
+                return promise;
+            }
+            return promise;
+        }
+    }
+})
+.service('ReceiptService', function($q, $http, ApiEndpoint) {
+    return {
+        AllReceipt: function(id) {
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+ 			
+			
+			
+			var req = {
+			 method: 'GET',
+			 url: ApiEndpoint.url + 'index.php?r=jobapi/list-receipts'
+			}
+			
+			$http(req)
+				.success(function(data) {
+				  deferred.resolve(data);
+				})
+				.error(function(error){
+				  deferred.reject('Wrong!.');
+				})
+			
+           
+            promise.success = function(fn) {
+                promise.then(fn);
+                return promise;
+            }
+            promise.error = function(fn) {
+                promise.then(null, fn);
+                return promise;
+            }
+            return promise;
+        }
+    }
+})
 .service('LoginService', function($q, $http, ApiEndpoint) {
     return {
         loginUser: function(name, pw) {
@@ -36,11 +182,11 @@ angular.module('starter.services', [])
 })
 .service('UserService', function($q, $http, ApiEndpoint) {
     return {
-        saveUser: function(name, email, fullname, mobile, address) {
+        saveUser: function(name, pass, email, fullname, mobile, address) {
             var deferred = $q.defer();
             var promise = deferred.promise;
  			
-			var data  = 'username='+name+'&email='+email+'&fullname='+fullname+'&mobile='+mobile+'&address='+address;
+			var data  = 'username='+name+'&email='+email+'&fullname='+fullname+'&mobile='+mobile+'&address='+address+'&password='+pass;
 			
 			
 			var req = {

@@ -1,9 +1,23 @@
 angular.module('starter.controllers', [])
 
-.controller('DashCtrl', function($scope, $rootScope) {
-	
+.controller('DashCtrl', function($scope, nfcService) {
+	$scope.tag = nfcService.tag;
+	$scope.clear = function() {
+		nfcService.clearTag();
+	};	
 })
+.controller('scan', function ($scope) {
+	$scope.navTitle = "Tap Receipt";
 
+	$scope.leftButtons = [{
+		type: 'button-icon icon ion-navicon',
+		tap: function(e) {
+			$scope.sideMenuController.toggleLeft();
+		}
+	}];
+
+	$scope.rightButtons = [];
+})
 .controller('AccountCtrl', function($scope, $rootScope, $http, ApiEndpoint, UserService, $ionicLoading, $ionicPopup) {
  	$scope.data = {};
 	
@@ -39,7 +53,7 @@ angular.module('starter.controllers', [])
 			showDelay: 0
 		  });
 		
-		UserService.saveUser($scope.data.username, $scope.data.email, $scope.data.firstname, $scope.data.mobile, $scope.data.surename).success(function(data) {
+		UserService.saveUser($rootScope.username, $scope.data.password, $scope.data.email, $scope.data.firstname, $scope.data.mobile, $scope.data.surename).success(function(data) {
 																							
 			$ionicLoading.hide();
 			
@@ -156,4 +170,93 @@ angular.module('starter.controllers', [])
             });
         });
     }
+}).controller('ReceiptCtrl', function($scope, $state, ReceiptService, $ionicPopup, $ionicLoading) {
+   
+	   $ionicLoading.show({
+		content: 'Loading',
+		animation: 'fade-in',
+		showBackdrop: true,
+		maxWidth: 200,
+		showDelay: 0
+	  });
+
+
+	ReceiptService.AllReceipt()
+		.success(function(data) {
+			$scope.data = data;
+			$ionicLoading.hide();
+		}).error(function(data) {
+			$ionicLoading.hide();
+        });
+}).controller('ViewReceiptCtrl', function($scope, $state, ViewReceiptService, $ionicPopup, $ionicLoading, $stateParams, DeleteReceiptService, $ionicModal, SendReceiptService) {
+   
+	$ionicLoading.show({
+		content: 'Loading',
+		animation: 'fade-in',
+		showBackdrop: true,
+		maxWidth: 200,
+		showDelay: 0
+	});
+	
+	$scope.senddata = {};
+	
+	$scope.share = function(){
+		$scope.openModal();
+	};
+	
+	$scope.sendshare = function(){
+		SendReceiptService.sendReceipt($stateParams.id, $scope.senddata.email);
+		$scope.closeModal();
+	};
+	
+ 	
+	$scope.delete = function(){
+		var confirmPopup = $ionicPopup.confirm({
+		 title: 'Delete Record',
+		 template: 'Are you sure you want to delete record?'
+	   });
+		
+	   confirmPopup.then(function(res) {
+		 if(res) {
+			$ionicLoading.show({
+				content: 'Loading',
+				animation: 'fade-in',
+				showBackdrop: true,
+				maxWidth: 200,
+				showDelay: 0
+			}); 
+			DeleteReceiptService.deleteReceipt($stateParams.id)
+			.success(function(data) {
+				$ionicLoading.hide();
+				$state.go('tab.receipt');
+			}).error(function(data) {
+				$ionicLoading.hide();
+			});
+			
+		 } 
+	   });
+	};	
+	
+	
+	$ionicModal.fromTemplateUrl('share.html', {
+		scope: $scope,
+		animation: 'slide-in-up'
+	  }).then(function(modal) {
+		$scope.modal = modal;
+	  });
+	  $scope.openModal = function() {
+		$scope.modal.show();
+	  };
+	  $scope.closeModal = function() {
+		$scope.modal.hide();
+	  };
+
+	ViewReceiptService.ViewReceipt($stateParams.id)
+		.success(function(data) {
+			$scope.data = data;
+			$ionicLoading.hide();
+		}).error(function(data) {
+			$ionicLoading.hide();
+        });
 });
+
